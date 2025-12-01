@@ -1,0 +1,16 @@
+{
+    "name": "The Bridge Table",
+    "short_name": "Bridge Table",
+    "theme_color": "#2196f3",
+    "background_color": "#2196f3",
+    "display": "standalone",
+    "description":"Panchshil Towers Bridge Club" ,
+    "scope": "/",
+    "icons": [
+        {
+            "src": "http://bridgetable.in/assets/images/icon.png",
+            "sizes": "512x512"
+        }
+        
+    ]
+}

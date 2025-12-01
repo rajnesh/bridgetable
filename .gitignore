@@ -1,0 +1,15 @@
+# Ignore specified asset folders
+assets/fonts/
+assets/gallery/
+assets/images/
+assets/videos/
+
+
+node_modules/
+.vscode/
+.env
+.DS_Store
+Thumbs.db
+*.log
+dist/
+build/
