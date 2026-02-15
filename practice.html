@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="Pancshil Towers Bridge Community - Practice App">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>The Bridge Table - Practice</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="assets/images/suit-spade-fill.svg" type="image/png">
+    <link rel="shortcut icon" href="assets/images/suit-spade-fill.svg" type="image/png">
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bidding.css">
+    <link rel="stylesheet" href="assets/lib/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/default.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/lib/glightbox/css/glightbox.min.css">
+    <style>
+        /* Offset fixed navbar so the tab bar remains visible */
+        body.practice-page {
+            padding-top: 96px;
+        }
+
+        /* Visually and functionally disable nav items when their tabs are disabled */
+        .navbar-nav .nav-item a.disabled {
+            pointer-events: none;
+            opacity: 0.55;
+        }
+
+        @media (max-width: 991px) {
+            body.practice-page {
+                padding-top: 82px;
+            }
+        }
+
+        @media (max-width: 575px) {
+            body.practice-page {
+                padding-top: 76px;
+            }
+        }
+    </style>
+</head>
+
+<body class="practice-page">
+    <section id="home" class="section_rk light-background-rk header_area">
+        <div id="header_navbar" class="header_navbar sticky">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <nav class="navbar navbar-expand-lg">
+                            <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="toggler-icon"></span>
+                                <span class="toggler-icon"></span>
+                                <span class="toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
+                                <ul id="nav" class="navbar-nav me-auto">
+                                    <li class="nav-item">
+                                        <a href="#tab-section" id="practiceTabLink" data-tab-target="practice"
+                                            class="active">Practice Focus</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#tab-section" id="generationTabLink" data-tab-target="generation">Hand
+                                            Generation</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#tab-section" id="auctionTabLink" data-tab-target="auction">Auction</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#tab-section" id="playTabLink" data-tab-target="play">Play</a>
+                                    </li>
+                                </ul>
+                                <ul class="navbar-nav ms-auto">
+                                    <li class="nav-item">
+                                        <a href="#tab-section" id="activeTabLink" data-tab-target="active">Active
+                                            Conventions</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#tab-section" id="settingsTabLink" data-tab-target="settings">General
+                                            Settings</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/index.html#home">Home</a>
+                                    </li>
+                                </ul>
+                            </div> <!-- navbar collapse -->
+                        </nav> <!-- navbar -->
+                    </div>
+                </div> <!-- row -->
+            </div> <!-- container -->
+        </div> <!-- header navbar -->
+    </section>
+
+    <div class="app-container" id="tab-section">
+        <div class="main-container">
+            <!-- Tab Navigation -->
+            <div class="tab-container">
+                <div class="tab-nav">
+                    <button class="tab-button active" onclick="switchTab('practice')" id="practiceTab">Practice
+                        Focus</button>
+                    <button class="tab-button" onclick="switchTab('generation')" id="generationTab">Hand
+                        Generation</button>
+                    <button class="tab-button" onclick="switchTab('auction')" id="auctionTab">Auction</button>
+                    <button class="tab-button" onclick="switchTab('play')" id="playTab" disabled>Play</button>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- Active Conventions Tab -->
+                    <div class="tab-panel" id="activePanel">
+                        <div class="content-section">
+                            <div class="general-settings-header">Select which conventions to use during bidding:</div>
+                            <div id="conventionCheckboxes"></div>
+                        </div>
+                    </div>
+
+                    <!-- General Settings Tab -->
+                    <div class="tab-panel" id="settingsPanel">
+                        <div class="content-section">
+                            <div id="generalSettings" class="general-settings" aria-live="polite"></div>
+                        </div>
+                    </div>
+
+                    <!-- Practice Focus Tab -->
+                    <div class="tab-panel active" id="practicePanel">
+                        <div class="content-section">
+                            <div class="general-settings-header">Do you want to practice anything specific?</div>
+                            <div id="practiceConventionCheckboxes"></div>
+                            <div class="d-flex align-items-center justify-content-between"
+                                style="margin-top: 10px; gap: 12px;">
+                                <p class="text-muted" style="margin-bottom: 0; font-size: 0.95rem;">
+                                    Only those conventions selected under
+                                    <a href="#tab-section" data-tab-target="active">Active Conventions</a>
+                                    are enabled for practice.
+                                </p>
+                                <div class="d-flex" style="gap: 8px;">
+                                    <button class="main-btn secondary compact" type="button"
+                                        onclick="clearPracticeSelections()">Clear Selection</button>
+                                    <button class="main-btn success compact" type="button"
+                                        onclick="generateRandomHands()">Generate Hand and Play</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hand Generation Tab -->
+                    <div class="tab-panel" id="generationPanel">
+                        <div class="generation-controls">
+                            <h3>Hand Generation</h3>
+
+                            <div class="control-group">
+                                <div class="generation-toolbar">
+                                    <div class="radio-group">
+                                        <label class="radio-option">
+                                            <input type="radio" name="generationMode" value="random" checked
+                                                onclick="setGenerationMode('random')">
+                                            <span class="radio-label">Random</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="generationMode" value="manual"
+                                                onclick="setGenerationMode('manual')">
+                                            <span class="radio-label">Manual</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="generationMode" value="constraints"
+                                                onclick="setGenerationMode('constraints')">
+                                            <span class="radio-label">Constraints</span>
+                                        </label>
+                                    </div>
+                                    <div class="toolbar-actions">
+                                        <button class="main-btn success compact" onclick="generateRandomHands()"
+                                            id="generateBtn">
+                                            Generate Random Hands
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Manual Entry Mode -->
+                            <div id="manualMode" class="generation-mode mode-centered" style="display:none;">
+                                <h4>Enter Your Hand (South):</h4>
+                                <div class="suit-inputs-grid">
+                                    <div class="suit-input-section">
+                                        <label class="suit-label">♠ Spades:</label>
+                                        <input type="text" id="spadesInput" placeholder="AKQ2" class="suit-input"
+                                            oninput="validateSuitInput()">
+                                    </div>
+
+                                    <div class="suit-input-section">
+                                        <label class="suit-label">♥ Hearts:</label>
+                                        <input type="text" id="heartsInput" placeholder="J432" class="suit-input"
+                                            oninput="validateSuitInput()">
+                                    </div>
+
+                                    <div class="suit-input-section">
+                                        <label class="suit-label">♦ Diamonds:</label>
+                                        <input type="text" id="diamondsInput" placeholder="32" class="suit-input"
+                                            oninput="validateSuitInput()">
+                                    </div>
+
+                                    <div class="suit-input-section">
+                                        <label class="suit-label">♣ Clubs:</label>
+                                        <input type="text" id="clubsInput" placeholder="32" class="suit-input"
+                                            oninput="validateSuitInput()">
+                                    </div>
+                                </div>
+
+                                <div id="handValidationError" class="hand-error"></div>
+                                <div id="cardCount" class="card-count">Cards: 0/13</div>
+
+                                <div class="manual-help">
+                                    <small class="input-help">
+                                        <strong>Cards:</strong> A K Q J T 9 8 7 6 5 4 3 2 (use T for 10)<br>
+                                        <strong>Example:</strong> AKQ2 J432 32 32
+                                    </small>
+                                </div>
+
+                                <button class="main-btn success compact center-action"
+                                    onclick="generateFromManualHands()" id="generateManualBtn">
+                                    Generate Other Hands Randomly
+                                </button>
+                            </div>
+
+                            <!-- Constraint Mode -->
+                            <div id="constraintMode" class="generation-mode mode-centered" style="display:none;">
+                                <div class="constraints-grid">
+                                    <div class="constraint-section north">
+                                        <h5>North</h5>
+                                        <div class="constraint-row">
+                                            <label>HCP:</label>
+                                            <input type="number" id="northHcpMin" min="0" max="40" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="northHcpMax" min="0" max="40" value="40"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♠ Length:</label>
+                                            <input type="number" id="northSpadesMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="northSpadesMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♥ Length:</label>
+                                            <input type="number" id="northHeartsMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="northHeartsMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♦ Length:</label>
+                                            <input type="number" id="northDiamondsMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="northDiamondsMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♣ Length:</label>
+                                            <input type="number" id="northClubsMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="northClubsMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                    </div>
+
+                                    <div class="constraint-section south">
+                                        <h5>South</h5>
+                                        <div class="constraint-row">
+                                            <label>HCP:</label>
+                                            <input type="number" id="southHcpMin" min="0" max="40" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="southHcpMax" min="0" max="40" value="40"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♠ Length:</label>
+                                            <input type="number" id="southSpadesMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="southSpadesMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♥ Length:</label>
+                                            <input type="number" id="southHeartsMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="southHeartsMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♦ Length:</label>
+                                            <input type="number" id="southDiamondsMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="southDiamondsMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♣ Length:</label>
+                                            <input type="number" id="southClubsMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="southClubsMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                    </div>
+
+                                    <div class="constraint-section east">
+                                        <h5>East</h5>
+                                        <div class="constraint-row">
+                                            <label>HCP:</label>
+                                            <input type="number" id="eastHcpMin" min="0" max="40" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="eastHcpMax" min="0" max="40" value="40"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♠ Length:</label>
+                                            <input type="number" id="eastSpadesMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="eastSpadesMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♥ Length:</label>
+                                            <input type="number" id="eastHeartsMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="eastHeartsMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♦ Length:</label>
+                                            <input type="number" id="eastDiamondsMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="eastDiamondsMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♣ Length:</label>
+                                            <input type="number" id="eastClubsMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="eastClubsMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                    </div>
+
+                                    <div class="constraint-section west">
+                                        <h5>West</h5>
+                                        <div class="constraint-row">
+                                            <label>HCP:</label>
+                                            <input type="number" id="westHcpMin" min="0" max="40" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="westHcpMax" min="0" max="40" value="40"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♠ Length:</label>
+                                            <input type="number" id="westSpadesMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="westSpadesMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♥ Length:</label>
+                                            <input type="number" id="westHeartsMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="westHeartsMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♦ Length:</label>
+                                            <input type="number" id="westDiamondsMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="westDiamondsMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                        <div class="constraint-row">
+                                            <label>♣ Length:</label>
+                                            <input type="number" id="westClubsMin" min="0" max="13" value="0"
+                                                class="constraint-input">
+                                            <span>to</span>
+                                            <input type="number" id="westClubsMax" min="0" max="13" value="13"
+                                                class="constraint-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="main-btn success compact center-action"
+                                    onclick="generateConstrainedHands()">
+                                    Generate Hands with Constraints
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Auction Tab -->
+                    <div class="tab-panel" id="auctionPanel">
+                        <!-- Top toolbar: dealer, vulnerability, and actions -->
+                        <div class="auction-topbar">
+                            <div class="topbar-left">
+                                <div class="topbar-group dealer-selection">
+                                    <label for="dealer">Dealer</label>
+                                    <select id="dealer">
+                                        <option value="N">North</option>
+                                        <option value="E">East</option>
+                                        <option value="S" selected>South</option>
+                                        <option value="W">West</option>
+                                    </select>
+                                </div>
+                                <div class="topbar-group vulnerability-selection">
+                                    <label for="vulnerability">Vulnerability</label>
+                                    <select id="vulnerability">
+                                        <option value="none">None</option>
+                                        <option value="ns">N-S</option>
+                                        <option value="ew">E-W</option>
+                                        <option value="both">Both</option>
+                                    </select>
+                                </div>
+                                <div class="topbar-actions">
+                                    <button class="main-btn compact secondary" onclick="toggleOtherHands()"
+                                        id="toggleHandsBtn">
+                                        Show Other Hands
+                                    </button>
+                                    <button class="main-btn compact danger" onclick="getRecommendedBid()" id="hintBtn">
+                                        Hint
+                                    </button>
+                                    <button class="main-btn compact success" onclick="startAuction()"
+                                        id="startAuctionBtn" style="display:none;">
+                                        Start Auction
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Two-column layout: left = hands, right = auction -->
+                        <div class="auction-two-column">
+                            <div class="left-pane">
+                                <div id="gameLayout" class="current-hands-display" style="display:none;">
+                                    <div class="hands-grid">
+                                        <!-- Center overlay badges for dealer and vulnerability -->
+                                        <div id="tableOverlay" class="overlay-badges" aria-live="polite">
+                                            <div id="dealerBadge" class="badge badge-dealer">Dealer: South</div>
+                                            <div id="vulnBadge" class="badge badge-vul vuln-none">Vul: None</div>
+                                        </div>
+                                        <div class="hand-display" id="northHand" style="display: none;">
+                                            <div class="hand-title">North</div>
+                                            <div id="northHandContent"></div>
+                                        </div>
+                                        <div class="hand-display" id="eastHand" style="display: none;">
+                                            <div class="hand-title">East</div>
+                                            <div id="eastHandContent"></div>
+                                        </div>
+                                        <div class="hand-display" id="westHand" style="display: none;">
+                                            <div class="hand-title">West</div>
+                                            <div id="westHandContent"></div>
+                                        </div>
+                                        <div class="hand-display" id="southHand">
+                                            <div class="hand-title">South (You)</div>
+                                            <div id="southHandContent"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="right-pane">
+                                <div class="auction-section">
+                                    <div id="auctionContent" style="display:none;">
+                                        <p>Bidding Auction</p>
+
+                                        <!-- Auction Status -->
+                                        <div id="auctionStatus" class="alert alert-info">
+                                            Click "Start Auction" to begin bidding.
+                                        </div>
+
+
+
+                                        <!-- Reset Button -->
+                                        <div class="button-group" style="margin-bottom: 10px;">
+                                            <button class="main-btn secondary compact" onclick="resetAuction()"
+                                                id="resetAuctionBtn" style="display:none;">
+                                                🔄 Reset Auction
+                                            </button>
+                                            <!-- <button class="main-btn compact" id="auctionDownloadBtn" type="button">Download Auction</button>-->
+                                        </div>
+
+                                        <!-- Auction History -->
+                                        <div id="auctionHistory" class="auction-display">
+                                            <div class="auction-grid">
+                                                <div class="auction-position">West</div>
+                                                <div class="auction-position">North</div>
+                                                <div class="auction-position">East</div>
+                                                <div class="auction-position">South</div>
+                                            </div>
+                                            <div id="auctionBids"></div>
+                                        </div>
+
+                                        <!-- Bidding Interface placeholder (logic-controlled, UI uses compact pad below) -->
+                                        <div id="biddingInterface" style="display:none;"></div>
+                                    </div>
+                                </div>
+                                <!-- Below-Auction two-column area: left=compact bid pad, right=explanations (moved inside right pane for alignment) -->
+                                <div class="below-auction-grid">
+                                    <div class="bidpad-compact">
+                                        <!-- Special (PASS / X / XX) -->
+                                        <div class="bid-grid compact"
+                                            style="grid-template-columns: repeat(3, 1fr); margin-bottom: 8px;">
+                                            <button class="bid-button" onclick="makeBid('PASS')"
+                                                id="passBtn">Pass</button>
+                                            <button class="bid-button" onclick="makeBid('X')"
+                                                id="doubleBtn">Double</button>
+                                            <button class="bid-button" onclick="makeBid('XX')"
+                                                id="redoubleBtn">Redouble</button>
+                                        </div>
+                                        <!-- Main Bid Grid -->
+                                        <div class="bid-grid compact">
+                                            <!-- Level 1 -->
+                                            <button class="bid-button" onclick="makeBid('1C')">1♣</button>
+                                            <button class="bid-button" onclick="makeBid('1D')">1♦</button>
+                                            <button class="bid-button" onclick="makeBid('1H')">1♥</button>
+                                            <button class="bid-button" onclick="makeBid('1S')">1♠</button>
+                                            <button class="bid-button" onclick="makeBid('1NT')">1NT</button>
+                                            <!-- Level 2 -->
+                                            <button class="bid-button" onclick="makeBid('2C')">2♣</button>
+                                            <button class="bid-button" onclick="makeBid('2D')">2♦</button>
+                                            <button class="bid-button" onclick="makeBid('2H')">2♥</button>
+                                            <button class="bid-button" onclick="makeBid('2S')">2♠</button>
+                                            <button class="bid-button" onclick="makeBid('2NT')">2NT</button>
+                                            <!-- Level 3 -->
+                                            <button class="bid-button" onclick="makeBid('3C')">3♣</button>
+                                            <button class="bid-button" onclick="makeBid('3D')">3♦</button>
+                                            <button class="bid-button" onclick="makeBid('3H')">3♥</button>
+                                            <button class="bid-button" onclick="makeBid('3S')">3♠</button>
+                                            <button class="bid-button" onclick="makeBid('3NT')">3NT</button>
+                                            <!-- Level 4 -->
+                                            <button class="bid-button" onclick="makeBid('4C')">4♣</button>
+                                            <button class="bid-button" onclick="makeBid('4D')">4♦</button>
+                                            <button class="bid-button" onclick="makeBid('4H')">4♥</button>
+                                            <button class="bid-button" onclick="makeBid('4S')">4♠</button>
+                                            <button class="bid-button" onclick="makeBid('4NT')">4NT</button>
+                                            <!-- Level 5 -->
+                                            <button class="bid-button" onclick="makeBid('5C')">5♣</button>
+                                            <button class="bid-button" onclick="makeBid('5D')">5♦</button>
+                                            <button class="bid-button" onclick="makeBid('5H')">5♥</button>
+                                            <button class="bid-button" onclick="makeBid('5S')">5♠</button>
+                                            <button class="bid-button" onclick="makeBid('5NT')">5NT</button>
+                                            <!-- Level 6 -->
+                                            <button class="bid-button" onclick="makeBid('6C')">6♣</button>
+                                            <button class="bid-button" onclick="makeBid('6D')">6♦</button>
+                                            <button class="bid-button" onclick="makeBid('6H')">6♥</button>
+                                            <button class="bid-button" onclick="makeBid('6S')">6♠</button>
+                                            <button class="bid-button" onclick="makeBid('6NT')">6NT</button>
+                                            <!-- Level 7 -->
+                                            <button class="bid-button" onclick="makeBid('7C')">7♣</button>
+                                            <button class="bid-button" onclick="makeBid('7D')">7♦</button>
+                                            <button class="bid-button" onclick="makeBid('7H')">7♥</button>
+                                            <button class="bid-button" onclick="makeBid('7S')">7♠</button>
+                                            <button class="bid-button" onclick="makeBid('7NT')">7NT</button>
+                                        </div>
+                                    </div>
+                                    <div class="bid-explanations-panel">
+                                        <h4>Bid Explanations</h4>
+                                        <div id="explanationsList"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Play Tab -->
+                        <div class="tab-panel" id="playPanel">
+                            <div class="play-tab">
+                                <div class="play-topbar">
+                                    <div id="playStatus" class="play-status alert alert-light" style="display:none;">
+                                    </div>
+                                </div>
+                                <div class="play-main">
+                                    <div class="play-board" role="region" aria-label="Play table">
+                                        <div class="play-seat play-seat-north" id="playNorthArea">
+                                            <div class="hand-title">North (Dummy)</div>
+                                            <div id="playNorthHand" class="card-button-row"></div>
+                                        </div>
+                                        <div class="play-seat play-seat-west" id="playWestArea">
+                                            <div class="hand-title">West</div>
+                                            <div id="playWestHand" class="card-button-row"></div>
+                                        </div>
+                                        <div class="play-center" id="playTableArea">
+                                            <div class="trick-area" id="trickArea">
+                                                <div class="trick-slot trick-slot-north" data-seat="N"></div>
+                                                <div class="trick-slot trick-slot-east" data-seat="E"></div>
+                                                <div class="trick-slot trick-slot-south" data-seat="S"></div>
+                                                <div class="trick-slot trick-slot-west" data-seat="W"></div>
+                                                <div class="trick-hint">Click a card to play</div>
+                                            </div>
+                                            <div class="play-metrics">
+                                                <div id="playResultSummary" class="play-result" style="display:none;">
+                                                </div>
+                                                <ul id="playScoreBreakdown" class="score-breakdown"
+                                                    style="display:none;"></ul>
+                                            </div>
+                                        </div>
+                                        <div class="play-seat play-seat-east" id="playEastArea">
+                                            <div class="hand-title">East</div>
+                                            <div id="playEastHand" class="card-button-row"></div>
+                                        </div>
+                                        <div class="play-seat play-seat-south" id="playSouthArea">
+                                            <div class="hand-title">South (You)</div>
+                                            <div id="playSouthHand" class="card-button-row"></div>
+                                        </div>
+                                    </div>
+                                    <div class="play-controls">
+                                        <div class="play-controls-row">
+                                            <!-- Undo/Clear/Claim removed from UI per UX decision -->
+                                            <button id="playReplayBtn" class="main-btn compact" type="button">Replay
+                                                Hand</button>
+                                            <button id="playNewDealBtn" class="main-btn danger compact"
+                                                type="button">New Deal</button>
+                                            <button id="playDownloadLogBtn" class="main-btn compact"
+                                                type="button">Download Log</button>
+                                        </div>
+                                        <div id="playContractInfo" class="play-contract" aria-live="polite"
+                                            style="margin-top:6px;">Contract: —</div>
+                                        <div class="play-controls-meta">
+                                            <div class="trick-counts">
+                                                <span class="trick-count">N/S Tricks: <span
+                                                        id="trickCountNS">0</span></span>
+                                                <span class="trick-count">E/W Tricks: <span
+                                                        id="trickCountEW">0</span></span>
+                                                <span class="trick-count">Score for N/S: <span
+                                                        id="playInlineScore">0</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scripts -->
+        <!-- Inline conventions config to avoid CORS and external fetches -->
+        <script>
+            window.DEFAULT_CONVENTIONS_CONFIG = {
+                "opening_bids": {
+                    "strong_2_clubs": {
+                        "enabled": true,
+                        "min_hcp": 22,
+                        "description": "2C opening shows 22+ HCP, artificial and game forcing"
+                    },
+                    "weak_2_bids": {
+                        "enabled": true,
+                        "suits": ["D", "H", "S"],
+                        "min_hcp": 6,
+                        "max_hcp": 10,
+                        "min_length": 6,
+                        "description": "Weak 2 bids in diamonds, hearts, and spades"
+                    }
+                },
+                "slam_bidding": {
+                    "gerber": {
+                        "enabled": true,
+                        "continuations": true,
+                        "# info": "responses_map maps index->[bid] for 0,1,2,3 aces. index 0 is also used for 4 aces",
+                        "responses_map": ["4D", "4H", "4S", "4NT"]
+                    },
+                    "blackwood_regular": {
+                        "enabled": false,
+                        "variant": "regular",
+                        "description": "Regular Blackwood asking for aces only"
+                    },
+                    "blackwood_rkcb": {
+                        "enabled": true,
+                        "variant": "rkcb",
+                        "responses": "1430",
+                        "description": "Roman Key Card Blackwood with 1430 responses"
+                    },
+                    "control_showing_cue_bids": {
+                        "enabled": true,
+                        "description": "Cue bids showing first or second round control in slam-going auctions"
+                    }
+                },
+                "notrump_defenses": {
+                    "dont": {
+                        "enabled": true,
+                        "style": "standard"
+                    },
+                    "meckwell": {
+                        "enabled": false,
+                        "style": "standard"
+                    }
+                },
+                "notrump_responses": {
+                    "stayman": {
+                        "enabled": true,
+                        "description": "2C asking for a 4-card major after partner's 1NT (or 2C over 2NT optional)"
+                    },
+                    "jacoby_transfers": {
+                        "enabled": true,
+                        "description": "2D/2H over 1NT (3D/3H over 2NT) transfers to H/S respectively"
+                    },
+                    "texas_transfers": {
+                        "enabled": true,
+                        "description": "4D/4H over 1NT/2NT transferring to 4H/4S to play"
+                    },
+                    "minor_suit_transfers": {
+                        "enabled": false,
+                        "description": "2S transfers to clubs; 2NT transfers to diamonds over 1NT"
+                    }
+                },
+                "responses": {
+                    "jacoby_2nt": {
+                        "enabled": true,
+                        "description": "When responder has 4+ card support for partner's 1H/1S and 13+ HCP, 2NT is Jacoby (game forcing)."
+                    },
+                    "splinter_bids": {
+                        "enabled": true,
+                        "description": "Jump bids in new suits showing game-forcing values with 4+ support for partner's major and singleton/void in bid suit.",
+                        "min_hcp": 13,
+                        "min_support": 4,
+                        "max_shortness": 1
+                    },
+                    "bergen_raises": {
+                        "enabled": false,
+                        "style": "standard",
+                        "description": "3♣ = 7–10 with 4+ trumps; 3♦ = 11–12 with 4+ trumps; 3M = preemptive 0–6"
+                    },
+                    "drury": {
+                        "enabled": true,
+                        "min_hcp": 8,
+                        "max_hcp": 12,
+                        "min_support": 3,
+                        "description": "Drury convention for passed hand major suit raises"
+                    }
+                },
+                "competitive": {
+                    "unusual_nt": {
+                        "enabled": true,
+                        "direct": true,
+                        "passed_hand": false,
+                        "over_minors": false
+                    },
+                    "michaels": {
+                        "enabled": true,
+                        "strength": "wide_range",
+                        "direct_only": true
+                    },
+                    "lebensohl": {
+                        "enabled": true,
+                        "after_interference": true,
+                        "fast_denies": true
+                    },
+                    "responsive_doubles": {
+                        "enabled": true,
+                        "thru_level": 3,
+                        "min_strength": 8
+                    },
+                    "negative_doubles": {
+                        "enabled": true,
+                        "thru_level": 3
+                    },
+                    "takeout_doubles": {
+                        "enabled": true,
+                        "min_hcp": 12,
+                        "description": "Double for takeout, asking partner to bid"
+                    },
+                    "support_doubles": {
+                        "enabled": true,
+                        "thru": "2S",
+                        "description": "Double showing 3-card support for partner's suit"
+                    },
+                    "reopening_doubles": {
+                        "enabled": true,
+                        "min_hcp": 8,
+                        "description": "Doubles in reopening position"
+                    },
+                    "cue_bid_raises": {
+                        "enabled": true,
+                        "min_hcp": 10,
+                        "description": "Cue bids showing strong raises after interference"
+                    }
+                },
+
+                "general": {
+                    "vulnerability_adjustments": true,
+                    "passed_hand_variations": true,
+                    "balance_of_power": true,
+                    "relaxed_takeout_doubles": true,
+                    "systems_on_over_1nt_interference": {
+                        "transfers": false,
+                        "stolen_bid_double": false
+                    },
+                    "balanced_shapes": {
+                        "include_5422": false
+                    }
+                }
+            };
+        </script>
+        <script src="assets/js/bridge-types.js"></script>
+        <script src="assets/js/convention-manager.js"></script>
+        <script src="assets/js/combined-bidding-system.js"></script>
+        <script src="assets/js/cards-svg.js"></script>
+        <script src="assets/js/tf.min.js"></script>
+        <script>
+            // Keep nav links switching tabs while scrolling to the tab section
+            document.addEventListener('DOMContentLoaded', () => {
+                const tabLinks = document.querySelectorAll('a[data-tab-target], button[data-tab-target]');
+
+                // Keep navbar from triggering scroll and prevent clicks when the paired tab is disabled
+                tabLinks.forEach(link => {
+                    link.addEventListener('click', (ev) => {
+                        ev.preventDefault();
+                        const target = link.getAttribute('data-tab-target');
+                        if (!target) return;
+                        const tabButton = document.getElementById(`${target}Tab`);
+                        if (tabButton && tabButton.disabled) return;
+                        try { switchTab(target); } catch (err) { console.warn('switchTab failed', err); }
+                    });
+                });
+
+                // Ensure nav link active state mirrors tab selection
+                const syncNavActive = (target) => {
+                    document.querySelectorAll('a[data-tab-target]').forEach(a => {
+                        a.classList.toggle('active', a.getAttribute('data-tab-target') === target);
+                    });
+                };
+
+                // Keep nav disabled state in sync with tab disabled state
+                const syncNavDisabled = (tabButton) => {
+                    if (!tabButton?.id) return;
+                    const link = document.getElementById(`${tabButton.id}Link`);
+                    if (!link) return;
+                    if (tabButton.disabled) {
+                        link.classList.add('disabled');
+                        link.setAttribute('aria-disabled', 'true');
+                        link.tabIndex = -1;
+                    } else {
+                        link.classList.remove('disabled');
+                        link.removeAttribute('aria-disabled');
+                        link.tabIndex = 0;
+                    }
+                };
+
+                const tabButtons = document.querySelectorAll('.tab-button');
+                tabButtons.forEach(btn => syncNavDisabled(btn));
+
+                const observer = new MutationObserver((records) => {
+                    records.forEach(record => {
+                        if (record.type === 'attributes' && record.attributeName === 'disabled') {
+                            syncNavDisabled(record.target);
+                        }
+                    });
+                });
+                tabButtons.forEach(btn => observer.observe(btn, { attributes: true, attributeFilter: ['disabled'] }));
+
+                // Wrap switchTab to also update nav active state
+                const originalSwitchTab = window.switchTab;
+                window.switchTab = function (tabName) {
+                    const result = originalSwitchTab ? originalSwitchTab(tabName) : undefined;
+                    syncNavActive(tabName);
+                    return result;
+                };
+            });
+        </script>
+        <script>
+            (async function setTfjsBackend() {
+                try {
+                    // Force non-wasm for stability: try webgl, else cpu.
+                    const preferred = ['webgl', 'cpu'];
+                    for (const backend of preferred) {
+                        const hasFactory = typeof tf?.engine === 'function' && !!tf.engine()?.registryFactory?.[backend];
+                        if (!hasFactory) continue;
+                        await tf.setBackend(backend);
+                        await tf.ready();
+                        //console.log(`TFJS backend set to ${backend} (index bootstrap).`);
+                        return;
+                    }
+
+                    console.warn('No preferred backend (webgl/cpu) available; using default:', tf.getBackend ? tf.getBackend() : 'unknown');
+                } catch (e) {
+                    console.warn('Failed to set TFJS backend (index bootstrap):', e);
+                }
+            })();
+        </script>
+        <script type="module" src="assets/js/app.js"></script>
+</body>
+
+</html>

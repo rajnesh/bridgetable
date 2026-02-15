@@ -3,7 +3,7 @@ let currentSortOrder = '';
 let tableData = [];
 
 // Load CSV data when page loads
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadTableData();
     loadResultsData();
     loadTrainingSection();
@@ -16,8 +16,8 @@ function loadTableData() {
             // Parse CSV data
             const rows = data.split('\n');
             // Skip header row
-            for(let i = 1; i < rows.length; i++) {
-                if(rows[i].trim() !== '') {
+            for (let i = 1; i < rows.length; i++) {
+                if (rows[i].trim() !== '') {
                     const columns = rows[i].split(',');
                     tableData.push({
                         member: columns[0],
@@ -54,18 +54,18 @@ function loadResultsData() {
             // Parse CSV data
             const rows = data.split('\n');
             const resultsData = {};
-            
+
             // Skip header row and process data
-            for(let i = 1; i < rows.length; i++) {
-                if(rows[i].trim() !== '') {
+            for (let i = 1; i < rows.length; i++) {
+                if (rows[i].trim() !== '') {
                     const columns = rows[i].split(',');
-                    const tournament = columns[0];
-                    
+                    const tournament = columns[0].trim().replace(/\s+/g, ' ');
+
                     // Create array for tournament if it doesn't exist
                     if (!resultsData[tournament]) {
                         resultsData[tournament] = [];
                     }
-                    
+
                     // Add row data to tournament array
                     resultsData[tournament].push({
                         place: columns[1],
@@ -76,7 +76,7 @@ function loadResultsData() {
                     });
                 }
             }
-            
+
             // Populate all results tables
             populateResultsTables(resultsData);
         })
@@ -86,10 +86,11 @@ function loadResultsData() {
 function populateResultsTables(data) {
     // Find all tournament header elements
     const headers = document.querySelectorAll('#results h4.title');
-    
+
     headers.forEach(header => {
-        const tournamentName = header.textContent.trim();
-        
+        // Normalize whitespace so header text matches CSV keys even if broken across lines
+        const tournamentName = header.textContent.replace(/\s+/g, ' ').trim();
+
         // Find the next table element after the header
         let el = header.nextElementSibling;
         while (el && el.tagName !== 'TABLE') {
@@ -101,7 +102,7 @@ function populateResultsTables(data) {
         if (tableElement && data[tournamentName]) {
             const tbody = tableElement.querySelector('tbody');
             tbody.innerHTML = ''; // Clear existing rows
-            
+
             // Add rows for this tournament
             data[tournamentName].forEach(row => {
                 const tr = document.createElement('tr');
@@ -133,10 +134,10 @@ function loadTrainingSection() {
                 // Create a temporary container
                 const temp = document.createElement('div');
                 temp.innerHTML = html;
-                
+
                 // Insert the training section after results
                 resultsSection.insertAdjacentHTML('afterend', html);
-                
+
                 // Reinitialize WOW.js animations for the newly added content
                 if (typeof WOW !== 'undefined') {
                     new WOW().init();
@@ -163,13 +164,13 @@ function sortTable(columnIndex, tableId, sort_type = 'alpha') {
     // Add arrow icon to clicked header
     const header = headers[columnIndex];
     const arrow = document.createElement('i');
-    
+
     if (currentSortColumn === columnIndex) {
         currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
     } else {
         currentSortOrder = columnIndex === 0 ? 'asc' : 'desc';
     }
-    
+
     arrow.className = `bi bi-arrow-${currentSortOrder === 'asc' ? 'up' : 'down'} ms-1`;
     header.appendChild(arrow);
 
@@ -181,7 +182,7 @@ function sortTable(columnIndex, tableId, sort_type = 'alpha') {
 
         if (sort_type === 'alpha') {
             // Sort alphabetically
-            return currentSortOrder === 'asc' 
+            return currentSortOrder === 'asc'
                 ? aValue.localeCompare(bValue)
                 : bValue.localeCompare(aValue);
         } else {
